@@ -343,11 +343,15 @@ cy_en_usbpd_status_t Cy_USBPD_Adc_Init(cy_stc_usbpd_context_t *context, cy_en_us
 #else
     context->adcRefVddd[adcId] = false;
     context->adcVdddMv[adcId]  = MX_PD_ADC_REF_VOLT_MV;
+#if CY_PD_VMON_TYPEC_VBUS
+    context->vbusMonDiv        = CY_PD_VMON_TYPEC_VBUS_DIV;
+#else
 #if defined(CY_DEVICE_PMG1S3)
     context->vbusMonDiv        = VBUS_MON_DIV_6P_VAL;
 #else
     context->vbusMonDiv        = VBUS_MON_DIV_8P_VAL;
 #endif /* defined(CY_DEVICE_PMG1S3) */
+#endif /* defined(CY_PD_VMON_TYPEC_VBUS)*/
 #endif /* defined(CY_DEVICE_CCG3) */
 
     return CY_USBPD_STAT_SUCCESS;
@@ -5098,7 +5102,7 @@ void Cy_USBPD_SetRefgenVoltage(cy_stc_usbpd_context_t *context, uint8_t vrefSel,
 
 #if (defined(CY_DEVICE_PMG1S3) && CY_PD_EPR_ENABLE)
 /* VBUS max voltage in mV. */
-#define VBUS_VOLT_MAX               (30000u)
+#define VBUS_VOLT_MAX               (50000u)
 #else
 /* VBUS max voltage in mV. */
 #define VBUS_VOLT_MAX               (24000u)
